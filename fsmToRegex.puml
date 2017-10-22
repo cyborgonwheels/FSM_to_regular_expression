@@ -1,0 +1,45 @@
+@startuml
+Conversion "1" *-- "1" FSM
+
+FSM "1" *-- "many" FSMState
+FSM "1" *--  "no of states" TransRow
+Transition "1" *-- "1" FSMState
+TransRow "1" *-- "no of out edges" Transition
+
+class FSM {
+   states[] : FSMState
+   ---
+   fromState[] : transrow
+   ---
+   Character[] : alphabet
+   ---
+   load(istream)
+}
+
+class FSMState {
+  integer rep;
+  bool : final
+  bool : start
+}
+
+class  Transition {
+   char : event
+   FSMState : nextState
+   String : regexp  ;
+}
+
+class TransRow {
+  Transition : transitions[]
+}
+
+
+
+class Conversion {
+FSM : fsm
+---
+String fsmToRegex(IO.stream)
+
+---
+}
+
+@enduml
