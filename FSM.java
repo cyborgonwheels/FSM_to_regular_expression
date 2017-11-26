@@ -12,9 +12,9 @@ Public Class FSM ()
  // Add new and final state 
 // with appropriate ε-transitions.
 
-RemoveRemove all other 
-states, one state at a time reconstructing regular 
-expression paths through the state being removed. 
+// Remove all other 
+// states, one state at a time reconstructing regular 
+//expression paths through the state being removed. 
 For each pair of incoming and outgoing paths via thestate being removed (from x to y, labeled α and β, 
 respectively), add a transition from x to y with the 
 regular expression αγ*β (where γ is the regular 
