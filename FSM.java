@@ -1,46 +1,146 @@
 
+import java.util.*;
 
 
-Public Class FSM ()
 
-      ArrayList fsm ≠
-      newnew ArrayList();
-      System.out.println("Initial size of al: " + al.size());
-//Convert transitions to simple 
-//regular expressions. 
+public class FSM {
+	public FSM(String fileName) {
+		// read in the stream and create the users FSM
 
- // Add new and final state 
-// with appropriate ε-transitions.
+		ArrayList<FSMState> states = new ArrayList();  // all possible states of the fsm 
+		ArrayList<Character> alphabet  = new ArrayList();
+		ArrayList<TransRow> fromState  = new ArrayList(); // fromState[S.id] is list of transitions from S;
+		
 
-// Remove all other 
-// states, one state at a time reconstructing regular 
-//expression paths through the state being removed. 
-For each pair of incoming and outgoing paths via thestate being removed (from x to y, labeled α and β, 
-respectively), add a transition from x to y with the 
-regular expression αγ*β (where γ is the regular 
-expression on the self-loop on the state being 
-removed, or ε). Union together the regular 
-expressions for parallel transitions. When only the 
-start and final state remain with one transition, that 
-regular expression is the answer
+        // This will reference one line at a time
+        String line = null;
 
-      // add elements to the array list
-      al.add("C");
-      al.add("A");
-      al.add("E");
-      al.add("B");
-      al.add("D");
-      al.add("F");
-      al.add(1, "A2");
-      System.out.println("Size of al after additions: " + al.size());
+        try {
+            // FileReader reads text files in the default encoding.
+            FileReader fileReader = 
+                new FileReader(fileName);
 
-      // display the array list
-      System.out.println("Contents of al: " + al);
+            // Always wrap FileReader in BufferedReader.
+            BufferedReader bufferedReader = 
+                new BufferedReader(fileReader);
 
-      // Remove elements from the array list
-      al.remove("F");
-      al.remove(2);
-      System.out.println("Size of al after deletions: " + al.size());
-      System.out.println("Contents of al: " + al);
-   }
+            while((line = bufferedReader.readLine()) != null) {
+                if (line == "#states") {
+				
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+                }
+            }   
+
+            // Always close files.
+            bufferedReader.close();         
+        }
+        catch(FileNotFoundException ex) {
+            System.out.println(
+                "Unable to open file '" + 
+                fileName + "'");                
+        }
+        catch(IOException ex) {
+            System.out.println(
+                "Error reading file '" 
+                + fileName + "'");                  
+	
+		// Post condition: FSM has single initial state and a single final state
+		// and is ready to run fsmToRegex();
+		
+		createnew(); // add dummy initial state and final
+		      
+	}
+	
+	public  String fsmToRegex() {
+		// while not done {
+		// pick a state s and removeState(s);
+		FSMState s = new FSMState(7);
+		removeState(s.id);
+		// pick the single remainining edge and return edge.regexp
+		return  new String("");
+	}
+
+	
+
+		// Create initial and final states
+		private  void createnew () {
+
+		}
+		// Copy the old fsm but create new initial and final states with empty transitions
+
+
+		// remove states
+		private  void removeState(int s) {
+		}
 }
+
+
+// transitionTable[0][0] = ""ss);
+		return fsm.fsmToRegex();
+	}
+public void createFSM() {
+
+	}
+	// implement the state elimination 
+
+	
+}
+
+            // Always close files.
+            bufferedReader.close();         
+        }
+        catch(FileNotFoundException ex) {
+            System.out.println(
+                "Unable to open file '" + 
+                fileName + "'");                
+        }
+        catch(IOException ex) {
+            System.out.println(
+                "Error reading file '" 
+                + fileName + "'");                  
+	
+		// Post condition: FSM has single initial state and a single final state
+		// and is ready to run fsmToRegex();
+		
+		createnew(); // add dummy initial state and final
+		      
+	}
+	
+	public  String fsmToRegex() {
+		// while not done {
+		// pick a state s and removeState(s);
+		FSMState s = new FSMState(7);
+		removeState(s.id);
+		// pick the single remainining edge and return edge.regexp
+		return  new String("");
+	}
+
+	
+
+		// Create initial and final states
+		private  void createnew () {
+
+		}
+		// Copy the old fsm but create new initial and final states with empty transitions
+
+
+		// remove states
+		private  void removeState(int s) {
+		}
+}
+
+
+// transitionTable[0][0] = ""ss);
+		return fsm.fsmToRegex();
+	}
+public void createFSM() {
+
+	}
+	// implement the state elimination 
+
+	
+}
+
+
+
+
