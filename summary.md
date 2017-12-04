@@ -1,4 +1,4 @@
-# FSM_to_regular_expression
+                                # FSM_to_regular_expression
 
 (State Elimination): Convert transitions to simple 
 regular expressions. Add new start and final state 
