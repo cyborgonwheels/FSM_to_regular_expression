@@ -1,62 +1,146 @@
-import java.util.ArrayList;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import java.io;
+import javax.print.attribute.standard.PrinterLocation;
 
 import com.sun.corba.se.spi.orbutil.fsm.State;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-import com.sun.xml.internal.ws.wsdl.writer.document.StartWithExtensionsType;
+import com.sun.istack.internal.FinalArrayList;
+
+import java.util.*;  
+import java.util.*;  
 
 public class FSM {
-	public FSM(ArrayList<String> a_states, String a_initial, ArrayList<String> a_acceptingStates,
-			ArrayList<String> a_alphabet, String[][] a_transitionTable) {
-		states = a_states;   // states is a ref to a_states (so no O(n) copy of the members
-		initialState = a_initial;
-		acceptingStates = a_acceptingStates;
-		alphabet = a_alphabet;
-		transitionTable = a_transitionTable;
-	}
-	public FSM(IO.stream) {
+	//Our tranitions match this pattern 		s0:a>s2
+		static final Pattern PATTERN = Pattern.compile("s(\\d+):([a-z])>s(\\d+)");
+
+
+	public FSM(String fileName) {
 		// read in the stream and create the users FSM
+
+		//ArrayList<FSMState> states = new ArrayList<FSMState>();  // all possible states of the fsm 
+		// Chose to use hash table instead since they allow for easier lookup of state from integer.
+	 	Hashtable<Integer,FSMState> states = new Hashtable<Integer,FSMState>();  
+		ArrayList<Character> alphabet  = new ArrayList<Character>();
+		ArrayList<TransRow> fromState  = new ArrayList<TransRow>(); // fromState[S.id] is list of transitions from S;
+
+
+		// This will reference one line at a time
+		String line = null;
+
+
+		try {
+			// FileReader reads text files in the default encoding.
+			FileReader fileReader = 
+					new FileReader(fileName);
+
+			// Always wrap FileReader in BufferedReader.
+			BufferedReader bufferedReader = 
+					new BufferedReader(fileReader);
+
+			// Assuming no blank lines
+			
+			
+			while((line = bufferedReader.readLine()) != null) {
+				if (line.equalsIgnoreCase("#states")) {
+					line = bufferedReader.readLine();
+					while (!line.startsWith("#")) {
+						Scanner in = new Scanner(line).useDelimiter("[^0-9]+");
+						int id = in.nextInt();
+						states.put(id,new FSMState(id));
+						line = bufferedReader.readLine();
+					}
+				}
+				if (line.equalsIgnoreCase("#initial")) {
+					line = bufferedReader.readLine();  // we only expect 1 initial
+					Scanner in = new Scanner(line).useDelimiter("[^0-9]+");
+					int initState = in.nextInt();
+					states.get(initState).initialState=true;
+				
+				}
+				
+				if (line.equalsIgnoreCase("#accepting")) {
+					line = bufferedReader.readLine();  // we only expect 1 initial
+					while (!line.startsWith("#")) {
+						Scanner in = new Scanner(line).useDelimiter("[^0-9]+");
+						int acceptingState = in.nextInt();
+						states.get(acceptingState).acceptingState=true;
+						line = bufferedReader.readLine();
+					}
+				}
+				if (line.equalsIgnoreCase("#alphabet")) {
+					line = bufferedReader.readLine();  // we only expect 1 initial
+					while (!line.startsWith("#")) {
+						Character c = line.charAt(0);
+						alphabet.add(c);
+						line = bufferedReader.readLine();
+					}
+				}
 		
-		// Post condition: FSM has single initial state and a single final state
-		// and is ready to run fsmToRegex();
-		
-		createnew(); // add dummy initial state and final
-		      
-	}
+				if (line.equalsIgnoreCase("#transitions")) {
+					line = bufferedReader.readLine();  // we only expect 1 initial
+					while (line != null && ! (line.startsWith("#"))) {
+						Matcher matcher = PATTERN.matcher(line);
+						if (matcher.find()) {
+							System.out.println(matcher.group(1).trim()); // from
+							System.out.println(matcher.group(2)); // on
+							System.out.println(matcher.group(3)); // to
+						}
+
+						line = bufferedReader.readLine();
+					}
+				}
+
+			}
+
+			// Always close files.
+			bufferedReader.close();         
+		}
+		catch(FileNotFoundException ex) {
+			System.out.println(
+					"Unable to open file '" + 
+							fileName + "'");                
+		}
+		catch(IOException ex) {
+			System.out.println(                "Error reading file '" 	+ fileName + "'");
+		}
+
+
+	}  // end of CTOR
+	
 	
 
-	ArrayList<State> states;  // all possible states of the fsm 
-	ArrayList<Character> alphabet;
-	ArrayList<TransRow> fromState; // fromState[S.id] is list of transitions from S;
+
+	
+	// Copy the old fsm but create new initial and final states with empty transitions
+
 	
 	public  String fsmToRegex() {
 		// while not done {
 		// pick a state s and removeState(s);
-		
+		FSMState s = new FSMState(7);
+		removeState(s.id);
 		// pick the single remainining edge and return edge.regexp
+		return  new String("");
 	}
 
-	
-	// Convert transitions to simple regular expressions.
-		private  void simpleregex() {
-			// TODO Auto-generated method stub
-
-		}     
-
-		// Create initial and final states
-		private  void createnew () {
-
-		}
-		// Copy the old fsm but create new initial and final states with empty transitions
 
 
-		// remove states
-		private  void removeState(int s) {
-		}
+	//Create initial and final states
+	private  void createnew () {
+		//FSMState start = new FSMState();
+		//states
+	}
+	//Copy the old fsm but create new initial and final states with empty transitions
+
+
+	//remove states
+	private  void removeState(int s) {
+	}
 }
 
-
-// transitionTable[0][0] = ""
